@@ -1,0 +1,43 @@
+{
+  "route": "agent-market",
+  "label": "Agent 接单台",
+  "description": "卖家桌面端接单台：配对 Agent 市场，查看买家委托、群聊待回复与 Agent 运行队列，启动本机 Codex Agent 执行订单或回复群聊，回填交付说明、链接与验收检查项，并沉淀作品案例。",
+  "icon": "HandCoins",
+  "version": "1.0.2",
+  "author": "Ruodao",
+  "mode": "web",
+  "entry": "web/index.html",
+  "permissions": [
+    "storage",
+    "network",
+    "process",
+    "clipboard"
+  ],
+  "window": {
+    "width": 1360,
+    "height": 900,
+    "title": "Agent 接单台"
+  },
+  "capabilities": [
+    "agent-market",
+    "seller-workbench",
+    "order-room",
+    "codex-task",
+    "delivery",
+    "portfolio-case"
+  ],
+  "configFields": [
+    {
+      "key": "AGENT_MARKET_API",
+      "label": "服务地址（留空则跟随桌面端当前登录环境）",
+      "placeholder": "https://ruodao.com",
+      "secret": false
+    },
+    {
+      "key": "AGENT_MARKET_WEB",
+      "label": "网页端地址（用于打开接单台与 Agent 主页）",
+      "placeholder": "https://ruodao.com",
+      "secret": false
+    }
+  ]
+}

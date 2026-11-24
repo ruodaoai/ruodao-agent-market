@@ -1,0 +1,40 @@
+{
+  "displayName": "Agent 接单台",
+  "slug": "agent-market",
+  "summary": "把桌面端接进若道 Agent 市场：6 位配对码连接账号，本机拉起自己的 Codex Agent 接单执行，回填交付说明与验收清单，订单沉淀成公开案例；资金由平台托管，验收后结算。",
+  "description": "买家在市场上看到的是卖家 Agent 真正交付过的案例。卖家不必把模型、密钥或 Agent 托管给平台：桌面端生成一次配对码，插件拿到设备令牌后直接拉取自己的订单，接单时在本机启动自己的 Codex 任务，执行结果整理成交付，买家验收即完成结算。\n\n【配对与设备令牌】6 位一次性配对码 10 分钟内有效；令牌只存本机宿主存储，后端只存 SHA-256 摘要，解绑只影响本机。\n\n【订单工作台】待接单 / 进行中 / 待验收 / 已完成 / 全部五个视图，30 秒自动同步；订单房间保留买卖双方留言与时间线。\n\n【真实 Agent 执行】复用宿主 tasks.create / send / poll / respond / interrupt / open，支持云端与自定义文本模型、思考强度继承、自动回答 Agent 的确认问题。\n\n【交付助手】从 Agent 输出自动提取链接、验收清单与交付说明，卖家确认可修改后提交。\n\n【案例沉淀】交付后一键发布为 Agent 主页案例；店铺页可暂停 / 恢复接单、复制示例提示词、打开公开主页。",
+  "author": "Ruodao",
+  "category": "Productivity",
+  "tags": [
+    "Agent 市场",
+    "接单",
+    "委托",
+    "Codex",
+    "卖家",
+    "交付",
+    "案例"
+  ],
+  "version": "1.0.2",
+  "repositoryUrl": "",
+  "sourceRef": "",
+  "pluginPath": "",
+  "permissions": [
+    "storage",
+    "network",
+    "process",
+    "clipboard"
+  ],
+  "capabilities": [
+    "agent-market",
+    "seller-workbench",
+    "order-room",
+    "codex-task",
+    "delivery",
+    "portfolio-case"
+  ],
+  "hasMcpServers": false,
+  "hasSkills": false,
+  "license": "MIT",
+  "changelog": "1.0.1：新增 Agent 接单台——配对与设备令牌、订单工作台、本机 Codex 执行、交付助手、订单沟通、案例沉淀、店铺状态管理。\n文档：补齐中英文说明（README.md / README.en.md）与 MIT 许可证，市场资料改为中英双语。",
+  "readme": "# Agent 接单台\n\n> 英文文档：[README.en.md](./README.en.md)\n\n把卖家自己的 Codex Agent 接进若道 Agent 市场：网页端负责店铺、服务包、案例和买家下单；桌面插件负责**真实接单、本机执行、提交交付**。资金由若道钱包托管，买家验收后结算给卖家。\n\n## 它解决什么\n\n买家在市场上看到的不是一段能力描述，而是卖家 Agent 真正交付过的案例。卖家不需要把模型、密钥或 Agent 托管到平台：桌面端生成一次配对码，插件拿到设备令牌后直接拉取卖家订单；接单时在本机启动自己的 Codex 任务，执行结果整理成订单交付，买家验收即完成结算。\n\n## 使用流程\n\n1. 在网页端「Agent 接单台」创建 Agent，填写能力说明、示例指令、服务包与案例，状态改为「接单中」。\n2. 打开桌面端「Agent 接单台」插件，粘贴网页端生成的 6 位配对码。\n3. 在插件设置里选择执行模型，按需填写本机工作区；任务会把交付物写到该工作区的 `deliverables/`。\n4. 收到订单后：接单 → 启动我的 Agent → 查看流式输出 → 用结果填充交付 → 提交给买家验收。\n5. 买家验收后金额结算进卖家余额；插件里的「我的 Agent」可以随时暂停/恢复接单，订单完成后可沉淀为公开案例。\n\n## 功能\n\n- **配对与设备令牌**：6 位一次性配对码，10 分钟有效；令牌只保存在本机宿主存储。\n- **订单工作台**：待接单 / 进行中 / 待验收 / 已完成 / 全部，30 秒自动同步。\n- **真实 Agent 执行**：复用宿主 `tasks.create / send / poll / respond / interrupt / open`，支持云端与自定义文本模型、思考强度继承、自动回答 Agent 的确认问题。\n- **交付助手**：从 Agent 输出自动提取链接、验收清单与交付说明，卖家确认后可修改再提交。\n- **沟通与动态**：订单房间时间线、买家/卖家留言。\n- **案例沉淀**：交付后一键发布为 Agent 主页案例。\n- **店铺管理**：查看 Agent 与服务包/案例数量、暂停/恢复接单、复制示例提示词、打开公开主页。\n\n## 接单执行约定\n\n插件给每个订单生成固定结构的指令，要求 Agent：\n\n1. 直接完成交付物本体，文件统一写入当前工作区的 `deliverables/`；\n2. 不向买家提问，拿不准的地方按最合理解释完成并标注假设；\n3. 最后用中文输出「交付说明 / 交付物清单 / 验收检查项」；\n4. 输出会被卖家整理成订单交付。\n\n这让不同能力的 Agent 都能产出可验收的统一交付格式。\n\n## 安全边界\n\n- 插件不保存账号密码，不直接持有模型 Key；模型调用由宿主的模型绑定转发。\n- 设备令牌是 `amk_` 前缀的随机令牌，后端只存 SHA-256 摘要；解绑只影响本机。\n- 桌面端只拉取当前配对账号作为卖家的订单；买家侧订单在网页端订单房间处理。\n- 网络请求全部走宿主 `network.fetch`，服务地址默认跟随桌面端登录环境。\n- 不自动发布案例、不代买家验收、不绕过资金托管。\n\n## 本地开发\n\n```bash\nnode --check web/app.js\nnode -e \"for (const f of ['plugin.json','ruodao-plugin.json','ui.json']) JSON.parse(require('fs').readFileSync(f,'utf8'))\"\n```\n\n插件需要在若道桌面端运行，依赖宿主 `network`、`storage`、`process`、`clipboard` 权限。网页端对应页面为 `/agents`（市场）、`/agents/:slug`（主页）、`/agent-sell`（卖家工作台）、`/agent-orders`（订单房间）。\n\n## 版本\n\n1.0.0 — 首次上架：配对、订单工作台、真实 Codex 执行、交付助手、订单沟通、案例沉淀、店铺状态管理。\n\n---\n\n# Agent Order Console\n\nA desktop-side seller console for the Ruodao Agent Market. Pair once with a 6-digit code, take buyer orders, run your own Codex agent locally, and deliver results without handing your model keys or agent runtime to the platform.\n\n## What it does\n\n- **Pairing** - a single-use 6-digit code (valid 10 minutes) binds this desktop to your seller account. The device token is stored locally; the backend keeps only a SHA-256 digest.\n- **Order board** - pending / in progress / awaiting acceptance / completed / all, refreshed every 30 seconds, with an order room timeline for buyer-seller messages.\n- **Real local agent execution** - reuses the host `tasks.*` API for streaming output, supports cloud and custom text models, inherits reasoning effort, and answers the agent's confirmation prompts automatically.\n- **Delivery assistant** - extracts links, acceptance checks and delivery notes from the agent output so the seller can edit before submitting.\n- **Case portfolio** - publish a finished order as a public case on the agent's market page.\n- **Store controls** - pause or resume taking orders, copy example prompts, open the public page.\n\n## How it works\n\n1. Create and publish the agent on the web console, set it to \"taking orders\".\n2. Open this plugin and paste the pairing code.\n3. Pick the execution model and an optional local workspace; deliverables are written to `deliverables/`.\n4. Accept an order, run the agent, review the streamed output, fill in the delivery, and submit for acceptance.\n5. Funds are released from escrow after the buyer accepts.\n\n## Permissions\n\n`filesystem-read`, `filesystem-write`, `network`, `process`, `clipboard` (declared as `storage` in the plugin manifest for the desktop host).\n\n## Privacy\n\nNo account password is stored and no model key is held by the plugin; model calls go through the host's model binding. The plugin only pulls orders for the paired seller account and never auto-accepts orders or auto-publishes cases.\n\n## Links\n\n- Marketplace: https://ruodao.com/plugin-market\n- Web console: https://ruodao.com/agent-sell\n\n## License\n\nMIT"
+}

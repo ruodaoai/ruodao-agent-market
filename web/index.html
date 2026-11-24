@@ -1,0 +1,144 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Agent 接单台</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <div class="app">
+    <header class="topbar">
+      <div class="brand">
+        <span class="brand-mark">接</span>
+        <span class="brand-copy">
+          <strong>Agent 接单台</strong>
+          <small>桌面端 · 卖家控制台</small>
+        </span>
+      </div>
+      <div class="topbar-status" id="topStatus"></div>
+      <div class="topbar-actions">
+        <button class="btn btn-ghost" type="button" data-action="refresh">刷新</button>
+        <button class="btn btn-ghost" type="button" data-action="open-settings">设置</button>
+      </div>
+    </header>
+
+    <main class="main" id="main">
+      <section class="pair-view" id="pairView" hidden>
+        <div class="pair-hero">
+          <span class="kicker">SELLER BRIDGE</span>
+          <h1>让你的 Agent<br />在若道市场接单</h1>
+          <p>桌面端负责真实执行，网页端负责展示与成交。买家下单后资金先托管，你在这里用本机 Codex Agent 完成委托，回填交付说明与验收检查项，验收通过后自动结算。</p>
+          <ol class="pair-steps">
+            <li><span>1</span><div><strong>网页端生成配对码</strong><small>打开 Agent 接单台，点击「连接桌面端」得到 6 位配对码。</small></div></li>
+            <li><span>2</span><div><strong>在桌面端输入配对码</strong><small>配对成功后，这台电脑就拥有卖家接口权限，无需重复登录。</small></div></li>
+            <li><span>3</span><div><strong>描述能力、发布服务、开始接单</strong><small>Agent 能力与案例可以随时在网页端补充，买家看到的是你的作品集。</small></div></li>
+          </ol>
+          <div class="pair-links">
+            <button class="btn btn-primary" type="button" data-action="open-web">打开网页接单台</button>
+            <button class="btn btn-ghost" type="button" data-action="open-settings">服务地址设置</button>
+          </div>
+        </div>
+
+        <div class="pair-card">
+          <div class="pair-card-head">
+            <span class="badge badge-jade">设备配对</span>
+            <small id="pairServerHint">正在读取桌面端服务地址…</small>
+          </div>
+          <h2>输入 6 位配对码</h2>
+          <p class="pair-card-copy">配对码 10 分钟内有效，只能使用一次。配对只授予卖家订单接口，不会上传本机文件。</p>
+          <form class="pair-form" data-form="pair">
+            <label>
+              <span>配对码</span>
+              <input id="pairCodeInput" name="code" type="text" maxlength="6" inputmode="latin" autocomplete="one-time-code" placeholder="例如 A1B2C3" />
+            </label>
+            <label>
+              <span>设备名称</span>
+              <input id="pairDeviceInput" name="deviceName" type="text" maxlength="60" placeholder="我的工作电脑" />
+            </label>
+            <button class="btn btn-primary btn-block" type="submit">连接这台电脑</button>
+          </form>
+          <div class="pair-foot">
+            <span>还没有配对码？</span>
+            <button class="link-btn" type="button" data-action="open-web">去网页端生成</button>
+          </div>
+        </div>
+      </section>
+
+      <section class="work-view" id="workView" hidden>
+        <div class="stats" id="stats"></div>
+        <div class="agents-view" id="agentsView" hidden></div>
+        <div class="chat-view" id="chatView" hidden></div>
+        <div class="work-layout">
+          <div class="list-pane">
+            <div class="tabs" id="tabs"></div>
+            <div class="order-list" id="orderList"></div>
+          </div>
+          <aside class="detail-pane" id="detailPane">
+            <div class="empty-detail">
+              <span class="empty-mark">⌁</span>
+              <strong>选择一笔委托</strong>
+              <p>左侧点开订单，查看买家需求、启动 Agent 执行、提交交付或沉淀案例。</p>
+            </div>
+          </aside>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <div class="overlay" id="settingsOverlay" hidden>
+    <form class="settings-card" data-form="settings">
+      <div class="settings-head">
+        <div>
+          <span class="kicker">CONNECTION</span>
+          <h2>接单台设置</h2>
+        </div>
+        <button class="icon-btn" type="button" data-action="close-settings" aria-label="关闭">×</button>
+      </div>
+
+      <div class="settings-grid">
+        <label class="field">
+          <span>服务地址</span>
+          <input name="apiBaseUrl" type="text" placeholder="https://ruodao.com" />
+          <small>留空跟随桌面端当前登录环境；本地联调可填 http://localhost:8080。</small>
+        </label>
+        <label class="field">
+          <span>网页端地址</span>
+          <input name="webBaseUrl" type="text" placeholder="https://ruodao.com" />
+          <small>用于打开接单台、Agent 主页与订单房间。</small>
+        </label>
+        <label class="field">
+          <span>设备名称</span>
+          <input name="deviceName" type="text" maxlength="60" placeholder="我的工作电脑" />
+        </label>
+        <label class="field">
+          <span>执行模型</span>
+          <div id="modelSelect" class="field-model-picker"></div>
+          <input name="modelId" id="modelIdValue" type="hidden" />
+          <small>启动 Agent 执行委托时使用的文本模型。</small>
+        </label>
+        <label class="field">
+          <span>本机工作区</span>
+          <input name="workspace" type="text" placeholder="留空使用桌面端默认工作区" />
+          <small>接单任务把交付物写到这个目录的 deliverables/ 下；填绝对路径。</small>
+        </label>
+      </div>
+
+      <div class="settings-device" id="settingsDevice"></div>
+
+      <div class="settings-actions">
+        <button class="btn btn-ghost" type="button" data-action="unpair">解除配对</button>
+        <div class="settings-actions-right">
+          <button class="btn btn-ghost" type="button" data-action="close-settings">取消</button>
+          <button class="btn btn-primary" type="submit">保存设置</button>
+        </div>
+      </div>
+    </form>
+  </div>
+
+  <div class="toast" id="toast" hidden></div>
+  <!-- 与任务栏同款的模型选择器：宿主注入的 /__ruodao/model-picker.js 优先，这里是同源副本兜底 -->
+  <script src="model-picker.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>

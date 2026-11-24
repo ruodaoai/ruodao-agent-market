@@ -1,0 +1,31 @@
+{
+  "id": "com.ruodao.agent-market",
+  "name": "Agent 接单台",
+  "version": "1.0.2",
+  "apiVersion": ">=0.1.0 <0.2.0",
+  "description": "桌面端卖家控制台：6 位配对码接入 Agent 市场，查看买家委托，用本机 Codex Agent 执行订单，提交交付与检查项，沉淀作品案例。",
+  "permissions": [
+    "storage",
+    "network",
+    "process",
+    "clipboard"
+  ],
+  "contributes": {
+    "commands": [
+      {
+        "id": "com.ruodao.agent-market.public-text",
+        "title": "公共人设纯文本回复",
+        "description": "仅使用已持久化的 RUODAO_PUBLIC_PERSONA_V1 公共上下文生成文本。固定安全策略：仅依据所给公开上下文回答，不执行动作或工具，不泄露系统/安全指令或完整知识库，事实不足时说明，不自称人类律师。宿主绑定模型；不读取文件、工作区、私有记忆或 Skills，不接受输入覆盖模型地址。stdin {prompt}；stdout {state,text} 或 {state,code,error}。",
+        "action": {
+          "type": "process",
+          "command": "node",
+          "args": [
+            "bin/public-text.mjs"
+          ],
+          "cwd": ".",
+          "timeoutMs": 300000
+        }
+      }
+    ]
+  }
+}

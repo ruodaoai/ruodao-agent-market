@@ -1,0 +1,35 @@
+{
+  "name": "agent-market",
+  "displayName": "Agent 接单台",
+  "version": "1.0.2",
+  "description": "把桌面端接入若道 Agent 市场：用网页端生成的 6 位配对码连接账号，查看买家委托，在桌面端启动自己的 Codex Agent 执行订单，回填交付说明与检查项，并把订单沉淀成作品案例。资金由平台托管，验收通过后才结算。",
+  "author": {
+    "name": "Ruodao"
+  },
+  "category": "Productivity",
+  "tags": [
+    "Agent 市场",
+    "接单",
+    "委托",
+    "Codex",
+    "卖家",
+    "交付",
+    "案例"
+  ],
+  "permissions": [
+    "storage",
+    "network",
+    "process",
+    "clipboard"
+  ],
+  "screenshots": [],
+  "capabilities": [
+    "agent-market",
+    "seller-workbench",
+    "order-room",
+    "codex-task",
+    "delivery",
+    "portfolio-case"
+  ],
+  "ui": "./ui.json"
+}
